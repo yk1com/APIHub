@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator and Reader</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="generator">
+    <h1>1. Generate QR Code</h1>
+    <label for="data">Data:</label>
+    <input type="text" id="data" placeholder="Enter data to encode">
+
+    <label for="version">Version (1-40):</label>
+    <input type="number" id="version" min="1" max="40" value="1">
+
+    <label for="errorCorrection">Error Correction Level:</label>
+    <select id="errorCorrection">
+        <option value="L">L - Low</option>
+        <option value="M" selected>M - Medium</option>
+        <option value="Q">Q - Quartile</option>
+        <option value="H">H - High</option>
+    </select>
+
+    <label for="boxSize">Box Size (px):</label>
+    <input type="number" id="boxSize" min="1" value="200">
+
+    <label for="border">Border Size (modules):</label>
+    <input type="number" id="border" min="0" value="4">
+
+    <button onclick="generateQRCode()">Generate QR Code</button>
+    <p id="generateMessage"></p>
+    <img id="qrImage" alt="Generated QR Code">
+    <a id="downloadLink" download="qrcode.png">Download QR Code</a>
+</div>
+
+<div id="reader">
+    <h2>2. Read a QR Code</h2>
+    <div id="fileDropArea">
+        <label for="qrImageFile" id="fileLabel">Enter the image here:</label>
+        <input type="file" id="qrImageFile" onchange="showFileName()" style="display: none;">
+        <div id="imagePreview"></div>
+    </div>
+    <button onclick="readQRCode()">Read QR Code</button>
+    <p id="readMessage"></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

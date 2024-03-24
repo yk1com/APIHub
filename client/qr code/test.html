@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Image Uploader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #drop-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: border-color 0.3s ease-in-out;
+            margin-bottom: 20px;
+        }
+
+        #drop-area.dragging {
+            border-color: #007bff;
+        }
+
+        #drop-area:hover {
+            border-color: #007bff;
+        }
+
+        #uploadIcon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        #useImageButton {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #useImageButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="drop-area">
+        <img src="upload-icon.png" alt="Upload Icon" id="uploadIcon">
+        <h3>Click or Drag & Drop Image Here</h3>
+    </div>
+    <input type="file" id="fileInput">
+    <div id="imagePreview"></div>
+    <button id="useImageButton">Use Image</button>
+</div>
+
+<script>
+    let dropArea = document.getElementById('drop-area');
+    let imagePreview = document.getElementById('imagePreview');
+    let fileInput = document.getElementById('fileInput');
+    let useImageButton = document.getElementById('useImageButton');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            switch(eventName) {
+                case 'dragenter':
+                case 'dragover':
+                    this.classList.add('dragging');
+                    break;
+                case 'dragleave':
+                case 'drop':
+                    this.classList.remove('dragging');
+                    break;
+            }
+        }, false);
+    });
+
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        let dt = e.dataTransfer;
+        let files = dt.files;
+        handleFiles(files);
+    }
+
+    fileInput.addEventListener('change', function() {
+        let files = this.files;
+        handleFiles(files);
+    });
+
+    function handleFiles(files) {
+        if (files.length === 0) return;
+        let file = files[0];
+        if (file.type.startsWith('image/')) {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function() {
+                let img = document.createElement('img');
+                img.src = reader.result;
+                img.id = 'uploadedImage';
+                imagePreview.innerHTML = '';
+                imagePreview.appendChild(img);
+                useImageButton.disabled = false;
+            };
+        } else {
+            alert('Please upload an image file.');
+        }
+    }
+
+    useImageButton.addEventListener('click', function() {
+        let img = document.getElementById('uploadedImage');
+        if (img) {
+            alert('Image URL: ' + img.src);
+        } else {
+            alert('No image uploaded.');
+        }
+    });
+</script>
+</body>
+</html>

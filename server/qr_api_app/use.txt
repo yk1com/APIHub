@@ -1,0 +1,72 @@
+QR Code Generator API Usage Guide
+1. Generate a QR Code
+Endpoint: http://localhost:8000/api/qrcode/generate/
+Request:
+
+Method: POST
+Headers:
+Content-Type: application/json
+Body:
+
+json
+Copy code
+{
+    "data": "YourDataHere",
+    "version": 2,
+    "error_correction": "H",
+    "box_size": 12,
+    "border": 6
+}
+Example using Postman:
+
+Open Postman.
+Set the request type to POST.
+Enter the URL: http://localhost:8000/api/generate/.
+Select Body and choose raw and JSON from the dropdown.
+Enter the JSON data mentioned above.
+Click on the Send button.
+Response:
+
+{
+    "message": "QR code generated. Download from: http://localhost:8000/media/YourFileName.png"
+}
+2. Read a QR Code
+Endpoint: http://localhost:8000/api/qrcode/read/
+Request:
+
+Method: POST
+Headers:
+Content-Type: multipart/form-data
+Body:
+
+Add a key named image and upload an image file containing a QR code.
+Example using Postman:
+
+Open Postman.
+Set the request type to POST.
+Enter the URL: http://localhost:8000/api/read/.
+Select Body and choose form-data from the dropdown.
+Add a key named image:
+For the key type, choose File.
+Click on the Choose Files button and select an image file containing a QR code from your computer.
+Click on the Send button.
+Response:
+
+json
+{
+    "qr_data": [
+        {
+            "data": "DecodedDataHere",
+            "type": "QRCODE"
+        }
+    ]
+}
+Summary:
+To Generate a QR Code:
+
+Send a POST request to /api/generate/ with the required and optional parameters in the JSON body.
+Retrieve the generated QR code download link from the API response.
+To Read a QR Code:
+
+Send a POST request to /api/read/ and upload an image file containing a QR code.
+Retrieve the decoded data and type of the QR code from the API response.
